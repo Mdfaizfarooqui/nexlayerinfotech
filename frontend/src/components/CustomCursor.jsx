@@ -1,88 +1,148 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 export default function CustomCursor() {
-  const cursorRef = useRef(null);
-  const ringRef = useRef(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
-  const ringPosRef = useRef({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+  const [cursorText, setCursorText] = useState('');
+
+  // Motion values track raw mouse coordinates
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  // Smooth springs for outer ring
+  const springConfig = { damping: 25, stiffness: 350, mass: 0.5 };
+  const smoothX = useSpring(mouseX, springConfig);
+  const smoothY = useSpring(mouseY, springConfig);
+
+  // Snappy springs for inner dot
+  const dotConfig = { damping: 30, stiffness: 700, mass: 0.2 };
+  const dotX = useSpring(mouseX, dotConfig);
+  const dotY = useSpring(mouseY, dotConfig);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
-      mouseRef.current.x = e.clientX;
-      mouseRef.current.y = e.clientY;
+      mouseX.set(e.clientX);
+      mouseY.set(e.clientY);
     };
 
     window.addEventListener('mousemove', handleMouseMove);
 
-    let animationFrameId;
-    const animCursor = () => {
-      const { x: mx, y: my } = mouseRef.current;
-      let rx = ringPosRef.current.x;
-      let ry = ringPosRef.current.y;
-
-      rx += (mx - rx) * 0.12;
-      ry += (my - ry) * 0.12;
-
-      ringPosRef.current = { x: rx, y: ry };
-
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate(${mx - 6}px, ${my - 6}px)`;
+    // Global event delegation for hovering interactive elements
+    const handleMouseOver = (e) => {
+      const target = e.target.closest('a, button, input, textarea, select, .interactive, .work-card, .service-row-hover, [role="button"], .pricing-slider, .filter-btn');
+      
+      if (target) {
+        setIsHovering(true);
+        
+        // Dynamically inject text inside the cursor for specific elements
+        if (target.closest('.work-card')) {
+          setCursorText('VIEW');
+        } else if (target.closest('.service-row-hover')) {
+          setCursorText('SEE');
+        } else {
+          setCursorText('');
+        }
+      } else {
+        setIsHovering(false);
+        setCursorText('');
       }
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
-      }
-
-      animationFrameId = requestAnimationFrame(animCursor);
     };
 
-    animCursor();
+    window.addEventListener('mouseover', handleMouseOver);
 
-    // Hover listeners
-    const addHoverEffects = () => {
-      const interactiveEls = document.querySelectorAll('a, button, select, input, textarea, .work-card, .service-item, .pricing-slider, .filter-btn');
-      interactiveEls.forEach(el => {
-        const handleMouseEnter = () => {
-          if (cursorRef.current) cursorRef.current.style.transform += ' scale(1.8)';
-          if (ringRef.current) {
-            ringRef.current.style.width = '60px';
-            ringRef.current.style.height = '60px';
-            ringRef.current.style.borderColor = 'rgba(124, 109, 250, 0.6)';
-            ringRef.current.style.transform = `translate(${ringPosRef.current.x - 30}px, ${ringPosRef.current.y - 30}px)`;
-          }
-        };
-
-        const handleMouseLeave = () => {
-          if (ringRef.current) {
-            ringRef.current.style.width = '36px';
-            ringRef.current.style.height = '36px';
-            ringRef.current.style.borderColor = 'rgba(196, 186, 255, 0.4)';
-          }
-        };
-
-        el.addEventListener('mouseenter', handleMouseEnter);
-        el.addEventListener('mouseleave', handleMouseLeave);
-      });
-    };
-
-    // Delay a bit to ensure elements are in the DOM
-    const timer = setTimeout(addHoverEffects, 1000);
-
-    // Re-bind hover listeners whenever the DOM shifts substantially (e.g., view toggles)
-    const observer = new MutationObserver(addHoverEffects);
-    observer.observe(document.body, { childList: true, subtree: true });
+    // Hide native cursor site-wide
+    document.body.style.cursor = 'none';
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
-      cancelAnimationFrame(animationFrameId);
-      clearTimeout(timer);
-      observer.disconnect();
+      window.removeEventListener('mouseover', handleMouseOver);
+      document.body.style.cursor = 'auto';
     };
-  }, []);
+  }, [mouseX, mouseY]);
 
   return (
     <>
-      <div id="cursor" ref={cursorRef}></div>
-      <div id="cursor-ring" ref={ringRef}></div>
+      {/* Outer SVG Ring */}
+      <motion.div
+        style={{
+          x: smoothX,
+          y: smoothY,
+          position: 'fixed',
+          top: -24, // Offset to center a 48x48 box
+          left: -24,
+          pointerEvents: 'none',
+          zIndex: 9999,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          mixBlendMode: 'difference' // Gives it a premium inverted look on light/dark backgrounds
+        }}
+      >
+        <motion.svg
+          width="48"
+          height="48"
+          viewBox="0 0 48 48"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          animate={{
+            scale: isHovering ? (cursorText ? 2.2 : 1.5) : 1,
+            rotate: isHovering ? 90 : 0
+          }}
+          transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+        >
+          {/* Reticle shape */}
+          <motion.circle 
+            cx="24" cy="24" r="22" 
+            stroke="#fff" 
+            strokeWidth="1.5"
+            strokeDasharray={isHovering ? "none" : "4 4"}
+            animate={{ opacity: isHovering ? 0.3 : 0.8 }}
+          />
+          {/* Inner crosshair ticks */}
+          <motion.path 
+            d="M 24 0 L 24 6 M 24 42 L 24 48 M 0 24 L 6 24 M 42 24 L 48 24" 
+            stroke="#fff" 
+            strokeWidth="2"
+            animate={{ opacity: isHovering ? 0 : 0.6 }}
+          />
+        </motion.svg>
+        
+        {/* Hover Text injected in center */}
+        <motion.div
+           initial={{ opacity: 0 }}
+           animate={{ opacity: cursorText && isHovering ? 1 : 0, scale: cursorText && isHovering ? 1 : 0.5 }}
+           style={{
+             position: 'absolute',
+             fontSize: '7px',
+             fontWeight: 800,
+             color: '#fff',
+             letterSpacing: '1px'
+           }}
+        >
+          {cursorText}
+        </motion.div>
+      </motion.div>
+
+      {/* Inner Snappy Dot */}
+      <motion.div
+        style={{
+          x: dotX,
+          y: dotY,
+          position: 'fixed',
+          top: -4,
+          left: -4,
+          pointerEvents: 'none',
+          zIndex: 10000,
+          width: '8px',
+          height: '8px',
+          borderRadius: '50%',
+          backgroundColor: '#00e5a0',
+        }}
+        animate={{
+          scale: isHovering ? 0 : 1 // Hide dot when ring expands
+        }}
+        transition={{ duration: 0.2 }}
+      />
     </>
   );
 }

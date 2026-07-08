@@ -2,7 +2,13 @@ import React, { useState, useEffect } from 'react';
 import CustomCursor from './components/CustomCursor';
 import StarField from './components/StarField';
 import AdminDashboard from './components/AdminDashboard';
-import NetworkMesh from './components/NetworkMesh';
+
+import ProjectCarousel3D from './components/ProjectCarousel3D';
+import TeamShowcase from './components/TeamShowcase';
+import ServiceHoverReveal from './components/ServiceHoverReveal';
+import EstimateEngine from './components/EstimateEngine';
+import ScrollStackCards from './components/ScrollStackCards';
+import ThemeAware3DModel from './components/ThemeAware3DModel';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -219,7 +225,7 @@ export default function App() {
       {view === 'admin' ? (
         <AdminDashboard onClose={() => setView('main')} />
       ) : (
-        <>
+        <main>
           {/* HERO */}
           <section className="hero" id="home">
             <div className="hero-bg"></div>
@@ -239,82 +245,21 @@ export default function App() {
                   We are a next-gen digital agency engineering fast, reliable, and beautifully functional software systems tailored for dynamic scale.
                 </p>
                 <div className="hero-actions">
-                  <a href="#contact" className="hero-btn-primary cyber-btn">
+                  <a href="#contact" className="hero-btn-primary cyber-btn" title="Get Started with Nexlayer Infotech" aria-label="Get Started">
                     <span>Get Started</span>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
                       <line x1="5" y1="12" x2="19" y2="12"></line>
                       <polyline points="12 5 19 12 12 19"></polyline>
                     </svg>
                   </a>
-                  <a href="#work" className="hero-btn-secondary cyber-btn-sec">
+                  <a href="#work" className="hero-btn-secondary cyber-btn-sec" title="View our portfolio of projects" aria-label="View Projects">
                     <span>View Projects</span>
                   </a>
                 </div>
               </div>
               
               <div className="hero-right">
-                <NetworkMesh isOverclocked={isOverclocked} />
-
-                {/* Cyber HUD Widget 1: System Status */}
-                <div className={`hud-card system-hud ${isOverclocked ? 'overclocked' : ''}`}>
-                  <div className="hud-header">
-                    <span className={`hud-dot pulsing ${isOverclocked ? 'alert' : ''}`}></span>
-                    <span className="hud-title">SYSTEM CORE {isOverclocked ? 'OVERCLOCKED' : 'v1.0.4'}</span>
-                  </div>
-                  <div className="hud-body">
-                    <div className="hud-stat-row">
-                      <span>CORE TEMP</span>
-                      <span className={`hud-value ${isOverclocked ? 'accent-red' : 'accent-cyan'}`}>{isOverclocked ? '84°C' : '34°C'}</span>
-                    </div>
-                    <div className="hud-stat-row">
-                      <span>LOAD</span>
-                      <span className={`hud-value ${isOverclocked ? 'accent-orange' : 'accent-purple'}`}>{isOverclocked ? '94.2%' : '12.4%'}</span>
-                    </div>
-                    <div className="hud-progress-bg">
-                      <div className={`hud-progress-bar ${isOverclocked ? 'overclocked-bar' : 'animate-progress'}`} style={{ width: isOverclocked ? '94.2%' : '12.4%' }}></div>
-                    </div>
-                    <button 
-                      className="hud-action-btn"
-                      onClick={() => setIsOverclocked(prev => !prev)}
-                    >
-                      {isOverclocked ? 'RESET_SYS' : 'OVERCLOCK'}
-                    </button>
-                  </div>
-                </div>
-
-                {/* Cyber HUD Widget 2: Agency Metrics */}
-                <div className="hud-card metrics-hud">
-                  <div className="hud-header">
-                    <span className="hud-dot"></span>
-                    <span className="hud-title">AGENCY METRICS</span>
-                  </div>
-                  <div className="hud-body">
-                    <div className="hud-metric">
-                      <span className="hud-metric-val">200+</span>
-                      <span className="hud-metric-lbl">SHIPPED CODEBASES</span>
-                    </div>
-                    <div className="hud-metric">
-                      <span className="hud-metric-val">99.9%</span>
-                      <span className="hud-metric-lbl">API UPTIME</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Cyber HUD Widget 3: Tech Stack Matrix */}
-                <div className="hud-card tech-hud">
-                  <div className="hud-header">
-                    <span className="hud-title">ACTIVE RUNTIME</span>
-                  </div>
-                  <div className="hud-body">
-                    <div className="hud-tech-list">
-                      <span className="hud-tech-tag">React 18</span>
-                      <span className="hud-tech-tag">Node.js</span>
-                      <span className="hud-tech-tag">SQLite</span>
-                      <span className="hud-tech-tag">Express</span>
-                      <span className="hud-tech-tag">Vite</span>
-                    </div>
-                  </div>
-                </div>
+                <ThemeAware3DModel />
               </div>
             </div>
 
@@ -393,52 +338,8 @@ export default function App() {
                 Every service we offer is built around one idea: your product deserves to be as remarkable as the problem it solves.
               </p>
             </div>
-            <div className="services-list reveal">
-              <div className="service-item">
-                <span className="service-num">01</span>
-                <span className="service-name">Web Development</span>
-                <div className="service-tags">
-                  <span className="tag">React</span>
-                  <span className="tag">Next.js</span>
-                  <span className="tag">Node.js</span>
-                </div>
-              </div>
-              <div className="service-item">
-                <span className="service-num">02</span>
-                <span className="service-name">SaaS Platforms</span>
-                <div className="service-tags">
-                  <span className="tag">Cloud APIs</span>
-                  <span className="tag">Scale</span>
-                  <span className="tag">Integrations</span>
-                </div>
-              </div>
-              <div className="service-item">
-                <span className="service-num">03</span>
-                <span className="service-name">Mobile Application</span>
-                <div className="service-tags">
-                  <span className="tag">React Native</span>
-                  <span className="tag">iOS & Android</span>
-                  <span className="tag">Expo</span>
-                </div>
-              </div>
-              <div className="service-item">
-                <span className="service-num">04</span>
-                <span className="service-name">UI / UX Design</span>
-                <div className="service-tags">
-                  <span className="tag">Figma</span>
-                  <span className="tag">Prototypes</span>
-                  <span className="tag">Research</span>
-                </div>
-              </div>
-              <div className="service-item">
-                <span className="service-num">05</span>
-                <span className="service-name">IT Support</span>
-                <div className="service-tags">
-                  <span className="tag">Maintenance</span>
-                  <span className="tag">Cloud / DevOps</span>
-                  <span className="tag">Security</span>
-                </div>
-              </div>
+            <div className="reveal">
+              <ServiceHoverReveal />
             </div>
           </section>
 
@@ -464,134 +365,33 @@ export default function App() {
               </div>
             </div>
 
-            <div className="work-grid reveal">
-              {filteredProjects.map((project) => (
-                <div key={project.id} className={`work-card ${project.featured ? 'featured-card' : ''}`}>
-                  <div className={`work-card-bg ${project.bgClass}`}>
-                    {project.shapes.map((shape, idx) => (
-                      <div key={idx} className="card-shape" style={shape.style}></div>
-                    ))}
-                  </div>
-                  <div className="work-card-inner">
-                    <div className="work-tag">{project.tag}</div>
-                    <div className="work-card-title">{project.title}</div>
-                    <div className="work-card-year">{project.year}</div>
-                  </div>
-                </div>
-              ))}
+            <div className="reveal" style={{ width: '100%', overflow: 'hidden' }}>
+              <ProjectCarousel3D projects={filteredProjects} />
             </div>
           </section>
 
           {/* PROCESS */}
-          <section className="process-section">
-            <div className="reveal">
+          <section className="process-section" style={{ paddingBottom: 0 }}>
+            <div className="reveal" style={{ marginBottom: '4rem' }}>
               <div className="section-label">How we work</div>
               <h2 className="process-headline">Our Process</h2>
             </div>
-            <div className="process-steps reveal">
-              <div className="process-step">
-                <div className="process-step-num">01 / DISCOVER</div>
-                <div className="process-step-title">Deep Dive</div>
-                <div className="process-step-desc">We start by understanding your users, competitors, and business goals inside-out before touching any design tool.</div>
-                <div className="process-connector"></div>
-              </div>
-              <div className="process-step">
-                <div className="process-step-num">02 / DEFINE</div>
-                <div className="process-step-title">Strategy</div>
-                <div className="process-step-desc">We translate research into a clear design strategy, information architecture, and a visual direction you approve.</div>
-                <div className="process-connector"></div>
-              </div>
-              <div className="process-step">
-                <div className="process-step-num">03 / DESIGN</div>
-                <div className="process-step-title">Craft</div>
-                <div className="process-step-desc">High-fidelity screens, prototypes, and motion — refined in tight feedback loops with weekly check-ins.</div>
-                <div className="process-connector"></div>
-              </div>
-              <div className="process-step">
-                <div className="process-step-num">04 / DELIVER</div>
-                <div className="process-step-title">Launch</div>
-                <div className="process-step-desc">Production-ready files, developer handoff, and post-launch support to make sure everything ships right.</div>
-              </div>
-            </div>
+            <ScrollStackCards />
           </section>
 
           {/* PRICING */}
           <section id="pricing">
-            <div className="reveal pricing-header-row">
-              <div>
-                <div className="section-label">Investment</div>
-                <h2 style={{ fontSize: 'clamp(2rem,4vw,4rem)', fontWeight: 700, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>Transparent Pricing</h2>
-              </div>
-              
-              {/* Billing Cycle Toggle */}
-              <div className="pricing-switch-container">
-                <span className={`pricing-switch-label ${billingCycle === 'monthly' ? 'active' : ''}`}>Monthly</span>
-                <label className="pricing-switch">
-                  <input 
-                    type="checkbox" 
-                    checked={billingCycle === 'annual'} 
-                    onChange={(e) => setBillingCycle(e.target.checked ? 'annual' : 'monthly')} 
-                  />
-                  <span className="pricing-slider"></span>
-                </label>
-                <span className={`pricing-switch-label ${billingCycle === 'annual' ? 'active' : ''}`}>Annual (Save 20%)</span>
-              </div>
+            <div className="reveal" style={{ marginBottom: '4rem' }}>
+              <div className="section-label">Investment</div>
+              <h2 style={{ fontSize: 'clamp(2.5rem,5vw,4.5rem)', fontWeight: 800, letterSpacing: '-1px', textTransform: 'uppercase', color: 'var(--text)' }}>Project Calculator</h2>
+              <p style={{ color: 'var(--muted)', fontSize: '1.1rem', maxWidth: '600px', marginTop: '1rem' }}>
+                Use our interactive quote builder to get an instant, transparent estimate for your next project based on current Indian market rates.
+              </p>
             </div>
             
-            <div className="pricing-grid reveal">
-              <div className="price-card">
-                <div className="price-type">Hourly</div>
-                <div className="price-amount">{getPrice(60, true)}</div>
-                <div className="price-unit">PER HOUR</div>
-                <ul className="price-features">
-                  <li>Flexible scope</li>
-                  <li>Weekly reporting</li>
-                  <li>Design + feedback</li>
-                  <li>Source files</li>
-                </ul>
-                <a href="#contact" className="price-btn">Get started</a>
-              </div>
-              <div className="price-card">
-                <div className="price-type">One-page</div>
-                <div className="price-amount">{getPrice(4)}</div>
-                <div className="price-unit">{billingCycle === 'annual' ? 'ANNUAL PRICE' : 'FIXED PRICE'}</div>
-                <ul className="price-features">
-                  <li>2 week delivery</li>
-                  <li>3 revision rounds</li>
-                  <li>Webflow build</li>
-                  <li>Source files</li>
-                </ul>
-                <a href="#contact" className="price-btn">Get started</a>
-              </div>
-              <div className="price-card featured">
-                <div className="price-type">Full Website</div>
-                <div className="price-amount">{getPrice(9)}</div>
-                <div className="price-unit">FROM</div>
-                <ul className="price-features">
-                  <li>4–6 week delivery</li>
-                  <li>Unlimited revisions</li>
-                  <li>CMS setup</li>
-                  <li>SEO foundation</li>
-                </ul>
-                <a href="#contact" className="price-btn">Get started</a>
-              </div>
-              <div className="price-card">
-                <div className="price-type">Product Design</div>
-                <div className="price-amount">{getPrice(12)}</div>
-                <div className="price-unit">FROM</div>
-                <ul className="price-features">
-                  <li>Full UX flow</li>
-                  <li>Design system</li>
-                  <li>Dev handoff</li>
-                  <li>6 months support</li>
-                </ul>
-                <a href="#contact" className="price-btn">Get started</a>
-              </div>
+            <div className="reveal" style={{ width: '100%' }}>
+              <EstimateEngine />
             </div>
-            
-            <p style={{ textAlign: 'center', marginTop: '2.5rem', fontSize: '0.78rem', color: 'var(--muted)', fontFamily: 'var(--mono)' }}>
-              * All prices are subject to 18% GST. Custom corporate contracts and flexible billing schedules are available.
-            </p>
           </section>
 
           {/* TEAM */}
@@ -601,15 +401,8 @@ export default function App() {
               <h2 className="team-headline">Our Team</h2>
               <p className="team-sub">Small enough to care. Experienced enough to deliver. Every project gets our full attention, not a junior team.</p>
             </div>
-            <div className="team-grid reveal">
-              <div className="team-card">
-                <div className="team-avatar">
-                  <div className="avatar-glow"></div>
-                  <div className="team-avatar-initials">MF</div>
-                </div>
-                <div className="team-name">Mohammed Faiz Farooqui</div>
-                <div className="team-role">Founder · Creative Director</div>
-              </div>
+            <div className="reveal" style={{ width: '100%', overflow: 'hidden' }}>
+              <TeamShowcase />
             </div>
           </section>
 
@@ -701,17 +494,17 @@ export default function App() {
               </form>
             </div>
           </section>
-        </>
+        </main>
       )}
 
       {/* FOOTER */}
       <footer>
         <div className="footer-logo">nexlayerinfotech © 2025</div>
         <ul className="footer-links">
-          <li><a href="#">Instagram</a></li>
-          <li><a href="#">Behance</a></li>
-          <li><a href="#">Dribbble</a></li>
-          <li><a href="#">LinkedIn</a></li>
+          <li><a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Follow Nexlayer on Instagram">Instagram</a></li>
+          <li><a href="https://behance.net" target="_blank" rel="noopener noreferrer" aria-label="View Nexlayer portfolio on Behance">Behance</a></li>
+          <li><a href="https://dribbble.com" target="_blank" rel="noopener noreferrer" aria-label="View Nexlayer designs on Dribbble">Dribbble</a></li>
+          <li><a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" aria-label="Connect with Nexlayer on LinkedIn">LinkedIn</a></li>
         </ul>
         <div className="footer-copy">Designed & built with intention.</div>
       </footer>
