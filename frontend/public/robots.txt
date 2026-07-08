@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://nexlayerinfotech.com/sitemap.xml
+Sitemap: https://nexlayerinfotech.vercel.app/sitemap.xml
